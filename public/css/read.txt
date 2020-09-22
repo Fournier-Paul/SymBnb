@@ -1,0 +1,6 @@
+CTRL + SHIF + F = search word(s)
+CTRL + D = occurence same caract
+CTRL + P = seach name file
+CTRL + G = line number
+CTRL + K -2 + S = multiple save
+CTRL + / = Comment
