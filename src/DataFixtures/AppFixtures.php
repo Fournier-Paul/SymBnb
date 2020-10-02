@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Ad;
 use Faker\Factory;
+use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Image;
 use Doctrine\Persistence\ObjectManager;
@@ -25,6 +26,24 @@ class AppFixtures extends Fixture
 
         $faker = Factory::create('fr-FR');
 
+        $adminRole = new Role();
+        $adminRole->setTitle('ROLE_ADMIN');
+        $manager->persist($adminRole);
+
+        $adminUser = new User();
+        $adminUser->setFirstName('Paul')
+                  ->setLastName('Fournier')
+                  ->setEmail('paul@symfony.com')
+                  ->setHash($this->encoder->encodePassword($adminUser, 'password'))
+                  ->setPicture("http://placehold.it/400x600") 
+                  ->setIntroduction($faker->sentence())
+                  ->setDescription('<p>' . join('</p><p>', $faker->paragraphs(3)) . '</p>')
+                  ->addUserRole($adminRole);
+                  
+        $manager->persist($adminUser);
+
+
+
         //Nous gérons les utilisateurs
 
         $users = [];
@@ -36,7 +55,7 @@ class AppFixtures extends Fixture
             $genre = $faker->randomElement($genres);
 
             $picture = 'https://randomuser.me/api/portraits/';
-            $picureId = $faker->numberBetween(1,99) . '.jpeg';
+            $picureId = $faker->numberBetween(1,99) . '.jpg';
 
             $picture .= ($genre == 'male' ? 'men/' : 'women/') . $picureId;
 
