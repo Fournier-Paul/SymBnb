@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Service\PaginationService;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,15 +15,17 @@ class AdminCommentController extends AbstractController
     /**
      * @Route("/admin/comments", name="admin_comment_index")
      */
-    public function index(CommentRepository $repo)
+    public function index(CommentRepository $repo, $page, PaginationService $pagination)
     {
-       // Without param in index : 
-       // $repo = $this->getDoctrine()->getRepository(Comment::class);
+        // Without param in index : 
+        // $repo = $this->getDoctrine()->getRepository(Comment::class);
 
-        $comments = $repo->findAll();
+        $pagination->setEntityClass(Comment::class)
+                   ->setLimit(5)
+                   ->setPage($page);
 
         return $this->render('admin/comment/index.html.twig', [
-            'comments' => $comments,
+            'pagination' => $pagination
         ]);
     }
     /**
@@ -38,7 +41,7 @@ class AdminCommentController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $manager->persist($comment);
             $manager->flush();
 
@@ -63,8 +66,8 @@ class AdminCommentController extends AbstractController
      * @return Response
      */
 
-     public function delete(Comment $comment,EntityManagerInterface $manager)
-     {
+    public function delete(Comment $comment, EntityManagerInterface $manager)
+    {
         $manager->remove($comment);
         $manager->flush();
 
@@ -73,5 +76,5 @@ class AdminCommentController extends AbstractController
             "Le commentaire de {$comment->getAuthor()} a bien été supprimé !"
         );
         return $this->redirectToRoute('admin_comment_index');
-     }
+    }
 }

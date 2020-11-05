@@ -1,11 +1,12 @@
 security:
     encoders:
         App\Entity\User:
-            algorithm: bcrypt   
+            algorithm: bcrypt
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        users_in_memory: { memory: null }
-        in_database: 
+        in_memory: { memory: ~ }
+        in_database:
             entity:
                 class: App\Entity\User
                 property: email
@@ -19,32 +20,33 @@ security:
 
             provider: in_database
 
-            form_login: 
+            form_login:
                 login_path: admin_account_login
                 check_path: admin_account_login
-            
+
             logout:
                 path: admin_account_logout
                 target: homepage
-
         main:
             anonymous: true
-            lazy: true
+
             provider: in_database
-            
+
             form_login: 
                 login_path: account_login
                 check_path: account_login
 
-            logout: 
+            logout:
                 path: account_logout
                 target: account_login
 
             # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
