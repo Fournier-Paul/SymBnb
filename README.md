@@ -1,6 +1,6 @@
 # SymBnb 
 
-## AirBnb clone with Symfony 5
+## AirBnb clone with Symfony 4
 
 
 ### System Requirements
