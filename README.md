@@ -30,6 +30,8 @@ php bin/console doctrine:migrations:migrate
 
 yarn encore dev --app
 
+php bin/console doctrine:fixtures:load
+
 echo 7.4.9 > .php-version
 
 ```
